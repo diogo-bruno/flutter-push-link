@@ -18,7 +18,7 @@ jobs:
       - checkout
       - run:
           name: Download Dependencies
-          command: cd ./example/android/ && sudo chmod +x ./gradlew && ./gradlew androidDependencies
+          command: cd ./example/android/ && gradle wrapper && sudo chmod +x ./gradlew && ./gradlew androidDependencies
       - run:
           name: Build
-          command: cd ./example/android/ && sudo chmod +x ./gradlew && ./gradlew assembleDebug
+          command: cd ./example/android/ && gradle wrapper && sudo chmod +x ./gradlew && ./gradlew assembleDebug
