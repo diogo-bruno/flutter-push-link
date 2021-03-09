@@ -1,24 +1,32 @@
 version: 2.1
-
-working_directory: ~/code
-
-environment:
-  # Customize the JVM maximum heap limit
-  JVM_OPTS: -Xmx3200m
-  TERM: dumb
-
-orbs:
-  android: circleci/android@0.2.1
-
 jobs:
-  build:
-    executor: android/android
-
+  lint:
+    description: 'Run static analysis for Flutter'
+    docker:
+      - image: cirrusci/flutter:v1.10.7
+    working_directory: ~/repo
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - dart-dependencies-{{ checksum "pubspec.lock" }}
+            - dart-dependencies-
       - run:
-          name: Download Dependencies
-          command: cd ./example/android/ && gradle wrapper && sudo chmod +x ./gradlew && ./gradlew androidDependencies
+          name: Install Dependencies
+          command: flutter pub get
       - run:
           name: Build
-          command: cd ./example/android/ && gradle wrapper && sudo chmod +x ./gradlew && ./gradlew assembleDebug
+          command: flutter packages pub run build_runner build
+      - save_cache:
+          paths:
+            - .dart_tool
+          key: dart-dependencies-{{ checksum "pubspec.lock" }}
+      - run:
+          name: Analyze code
+          command: flutter analyze lib
+      - run:
+          name: Analyze code
+          command: flutter analyze lib
+      - run:
+          name: Build
+          command: cd ./example/android/ && sudo chmod +x ./gradlew && ./gradlew assembleDebug
