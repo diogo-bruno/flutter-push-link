@@ -1,32 +1,16 @@
 version: 2.1
-jobs:
-  lint:
-    description: 'Run static analysis for Flutter'
+
+executors:
+  android-flutter:
     docker:
-      - image: cirrusci/flutter:v1.10.7
-    working_directory: ~/repo
+      - image: gmemstr/flutter-fastlane:latest
+    environment:
+      TERM: dumb
+      _JAVA_OPTIONS: '-Xmx2048m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m"'
+jobs:
+  beta_deploy:
+    executor: android-flutter
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - dart-dependencies-{{ checksum "pubspec.lock" }}
-            - dart-dependencies-
-      - run:
-          name: Install Dependencies
-          command: flutter pub get
-      - run:
-          name: Build
-          command: flutter packages pub run build_runner build
-      - save_cache:
-          paths:
-            - .dart_tool
-          key: dart-dependencies-{{ checksum "pubspec.lock" }}
-      - run:
-          name: Analyze code
-          command: flutter analyze lib
-      - run:
-          name: Analyze code
-          command: flutter analyze lib
-      - run:
-          name: Build
-          command: cd ./example/android/ && sudo chmod +x ./gradlew && ./gradlew assembleDebug
+      - run: cd ./example/android/ && sudo chmod +x ./gradlew && ./gradlew assembleDebug
