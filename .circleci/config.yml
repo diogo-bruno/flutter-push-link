@@ -1,24 +1,14 @@
 version: 2.1
 
-executors:
-  android-flutter:
-    docker:
-      - image: gmemstr/flutter-fastlane:latest
-    environment:
-      TERM: dumb
-      _JAVA_OPTIONS: '-Xmx2048m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m"'
+orbs:
+  android: circleci/android@0.2.1
+
 jobs:
-  master_deploy:
-    executor: android-flutter
+  build:
+    executor: android/android
+
     steps:
       - checkout
-      - run: cd android && fastlane beta
-
-workflows:
-  deploy:
-    jobs:
-      - master_deploy:
-          filters:
-            branches:
-              only: master
+      - run:
+          name: Download Dependencies
+          command: cd ./android/ && sudo chmod +x ./gradlew && ./gradlew androidDependencies
