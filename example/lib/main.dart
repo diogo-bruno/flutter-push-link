@@ -33,6 +33,7 @@ void onError(dynamic error) {
 }
 
 class _MyAppState extends State<MyApp> {
+  int countReciverEventListenerCustom = 0;
   String _deviceId = '';
   Map currentStrategy;
   bool pushLinkStaterd = false;
@@ -62,8 +63,16 @@ class _MyAppState extends State<MyApp> {
     setState(() => pushLinkStaterd = started);
   }
 
-  void _reciverEventListenerCustom(data) {
+  void _reciverEventListenerCustom(data) async {
     debugPrint("_reciverEventListener CUSTOM $data");
+
+    countReciverEventListenerCustom++;
+    FlutterPushLink.toastMessage(
+      'call reciverEventListenerCustom: ' + countReciverEventListenerCustom.toString(),
+    );
+
+    // Open modal user interaction or silent install...
+    //bool install = await FlutterPushLink.installApk().catchError(onError);
   }
 
   void selectStrategy() async {
