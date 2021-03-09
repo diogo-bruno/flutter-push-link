@@ -47,9 +47,6 @@ void main(List<String> arguments) async {
   HttpClient client = new HttpClient();
   client.findProxy = HttpClient.findProxyFromEnvironment;
 
-  packageName = 'com.example';
-  packageName = 'com.pushlink.background';
-
   String url = 'https://www.pushlink.com/download?package=' + packageName + '&api_key=' + pushLinkApiKey;
 
   var directoryPushlinkApkDownload = new Directory(Directory.current.path + '${Platform.pathSeparator}pushlink-apk-download');
