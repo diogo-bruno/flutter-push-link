@@ -1,0 +1,17 @@
+version: 2.1
+
+orbs:
+  android: circleci/android@0.2.1
+
+jobs:
+  build:
+    executor: android/android
+
+    steps:
+      - checkout
+      - run:
+          name: Download Dependencies
+          command: cd ./example/android/ && sudo chmod +x ./gradlew && ./gradlew androidDependencies
+      - run:
+         name: Build
+         command: cd ./example/android/ && sudo chmod +x ./gradlew && ./gradlew assembleDebug
