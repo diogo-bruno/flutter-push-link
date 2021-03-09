@@ -31,7 +31,7 @@ flutter pub get
 
 ---
 
-## Running Project
+## `Running Project`
 
 ```sh
 cd ./example && flutter run -d 'DeviceName or Id' -t lib/main.dart
